@@ -4,32 +4,38 @@ import { Coffee, ShoppingBag, Factory, Sparkles, Leaf, Briefcase } from 'lucide-
 const industries = [
     {
         name: "Hospitality",
-        icon: <Coffee size={40} />,
+        iconSm: <Coffee size={24} />,
+        iconLg: <Coffee size={40} />,
         desc: "Crafting digital experiences for premium hotels, restaurants, and travel brands."
     },
     {
         name: "Retail",
-        icon: <ShoppingBag size={40} />,
+        iconSm: <ShoppingBag size={24} />,
+        iconLg: <ShoppingBag size={40} />,
         desc: "E-commerce optimization and high-conversion strategies for modern retail."
     },
     {
         name: "Manufacturing",
-        icon: <Factory size={40} />,
+        iconSm: <Factory size={24} />,
+        iconLg: <Factory size={40} />,
         desc: "Digital transformation and lead generation for the industrial sector."
     },
     {
         name: "Wellness",
-        icon: <Sparkles size={40} />,
+        iconSm: <Sparkles size={24} />,
+        iconLg: <Sparkles size={40} />,
         desc: "Building communities and scaling impact for health and wellness brands."
     },
     {
         name: "Sustainability",
-        icon: <Leaf size={40} />,
+        iconSm: <Leaf size={24} />,
+        iconLg: <Leaf size={40} />,
         desc: "Strategic marketing for eco-conscious brands and green technologies."
     },
     {
         name: "Services",
-        icon: <Briefcase size={40} />,
+        iconSm: <Briefcase size={24} />,
+        iconLg: <Briefcase size={40} />,
         desc: "Professional services growth through authority building and digital precision."
     }
 ]
@@ -65,16 +71,17 @@ const Industries = () => {
                                     y: -10,
                                     transition: { duration: 0.3 }
                                 }}
-                                className="min-w-[320px] md:min-w-[400px] glass p-10 group/card relative border-white/5 hover:border-accent-pink/40 transition-all duration-500"
+                                className="min-w-[215px] md:min-w-[400px] glass p-5 md:p-10 group/card relative border-white/5 hover:border-accent-pink/40 transition-all duration-500"
                             >
                                 {/* Glow effect on hover */}
                                 <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                                <div className="mb-8 text-accent-pink relative z-10 transform group-hover/card:scale-110 transition-transform duration-500">
-                                    {industry.icon}
+                                <div className="mb-4 md:mb-8 text-accent-pink relative z-10 transform group-hover/card:scale-110 transition-transform duration-500">
+                                    <span className="md:hidden">{industry.iconSm}</span>
+                                    <span className="hidden md:block">{industry.iconLg}</span>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4 relative z-10">{industry.name}</h3>
-                                <p className="text-text-secondary font-light leading-relaxed relative z-10">
+                                <h3 className="text-base md:text-2xl font-bold mb-2 md:mb-4 relative z-10">{industry.name}</h3>
+                                <p className="text-xs md:text-base text-text-secondary font-light leading-relaxed relative z-10">
                                     {industry.desc}
                                 </p>
 

@@ -72,24 +72,37 @@ const services = [
 ]
 
 const Services = () => {
-    const [clickedIndex, setClickedIndex] = useState(null); // persists until clicked again
-    const [hoverIndex, setHoverIndex] = useState(null);     // auto-collapses on mouse leave
-    const hoverTimeoutRef = useRef(null);
+    const [activeIndex, setActiveIndex] = useState(null);
+    const hoverTimeoutRef = useRef(null);  // delay before opening
+    const closeTimeoutRef = useRef(null);  // 3s minimum-open timer
 
     const handleMouseEnter = (index) => {
+        // Cancel any pending close
+        if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+        // Cancel any pending open for a different card
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        // Only trigger hover-open if this card isn't already click-locked
-        if (clickedIndex !== index) {
-            hoverTimeoutRef.current = setTimeout(() => {
-                setHoverIndex(index);
-            }, 1000);
-        }
+
+        // Auto-open after 1s hover
+        hoverTimeoutRef.current = setTimeout(() => {
+            setActiveIndex(index);
+            // Start 3s minimum-open timer immediately after opening
+            closeTimeoutRef.current = setTimeout(() => {
+                setActiveIndex(null);
+            }, 3000);
+        }, 1000);
     };
 
     const handleMouseLeave = () => {
+        // Cancel pending open — the card hasn't opened yet
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-        // Collapse hover-opened card immediately on mouse leave
-        setHoverIndex(null);
+        // Do NOT cancel closeTimeoutRef — let the 3s timer run out naturally
+    };
+
+    const handleClick = (index) => {
+        // Clear all timers on manual click
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+        setActiveIndex(activeIndex === index ? null : index);
     };
 
     return (
@@ -105,8 +118,7 @@ const Services = () => {
             <LayoutGroup>
                 <div className="grid grid-cols-3 gap-3 md:gap-6 items-start">
                     {services.map((s, i) => {
-                        // Active if either click-locked OR hover-opened
-                        const isActive = clickedIndex === i || hoverIndex === i;
+                        const isActive = activeIndex === i;
                         return (
                             <motion.div
                                 key={i}
@@ -123,12 +135,7 @@ const Services = () => {
                                 viewport={{ once: true }}
                                 onMouseEnter={() => handleMouseEnter(i)}
                                 onMouseLeave={handleMouseLeave}
-                                onClick={() => {
-                                    handleMouseLeave(); // clear any pending hover timeout
-                                    setHoverIndex(null); // remove hover-open immediately
-                                    // Toggle click-lock
-                                    setClickedIndex(clickedIndex === i ? null : i);
-                                }}
+                                onClick={() => handleClick(i)}
                                 // On mobile: active card spans full 3 cols; on md+ normal 1 col
                                 className={[
                                     'glass group cursor-pointer relative overflow-hidden transition-colors duration-300',
@@ -161,12 +168,27 @@ const Services = () => {
 
                                 {/* ── EXPANDED card (mobile full-width) or DESKTOP ── */}
                                 <div className={isActive ? 'block' : 'hidden md:block'}>
-                                    <motion.div layout className="mb-3 md:mb-6 text-accent-pink">
-                                        {s.icon}
-                                    </motion.div>
-                                    <motion.h3 layout className="text-base md:text-2xl font-bold mb-2 md:mb-3 leading-tight">
-                                        {s.title}
-                                    </motion.h3>
+                                    <AnimatePresence>
+                                        {isActive && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -6 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{ duration: 0.25 }}
+                                                className="relative z-10"
+                                            >
+                                                <div className="mb-3 md:mb-6 text-accent-pink">{s.icon}</div>
+                                                <h3 className="text-base md:text-2xl font-bold mb-2 md:mb-3 leading-tight">{s.title}</h3>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                    {/* On desktop non-active: show icon + title without animation */}
+                                    {!isActive && (
+                                        <div className="relative z-10">
+                                            <div className="mb-3 md:mb-6 text-accent-pink">{s.icon}</div>
+                                            <h3 className="text-2xl font-bold mb-3 leading-tight">{s.title}</h3>
+                                        </div>
+                                    )}
 
                                     {/* desktop non-active description */}
                                     {!isActive && (

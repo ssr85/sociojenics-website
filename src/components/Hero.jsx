@@ -20,7 +20,7 @@ const Hero = () => {
             </div>
 
             {/* ── MOBILE / TABLET (< md): image as background, text overlaid ── */}
-            <div className="md:hidden absolute inset-0 z-0">
+            <div className="md:hidden absolute inset-0 top-20 z-0">
                 <img
                     src="/assets/brand-hero-seamless.png"
                     alt="Sociojenics Creative Direction"
