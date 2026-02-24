@@ -134,75 +134,95 @@ const Services = () => {
                                 {/* Glow */}
                                 <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                                <motion.div layout className={`text-accent-pink relative z-10 ${isActive ? 'mb-3 md:mb-6' : 'mb-2 md:mb-6 scale-75 md:scale-100'}`}>
-                                    {s.icon}
-                                </motion.div>
-
-                                <motion.h3 layout className={`font-bold relative z-10 leading-tight ${isActive
-                                        ? 'text-base md:text-2xl mb-2 md:mb-3'
-                                        : 'text-[10px] sm:text-xs md:text-2xl mb-1 md:mb-3 text-center md:text-left'
-                                    }`}>
-                                    {s.title}
-                                </motion.h3>
-
-                                {/* Description: always visible when expanded on mobile; only on md+ otherwise */}
-                                <AnimatePresence>
-                                    {isActive && (
-                                        <motion.p
-                                            layout
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            className="text-xs md:text-sm text-text-secondary leading-relaxed mb-3 md:mb-4 relative z-10"
-                                        >
-                                            {s.desc}
-                                        </motion.p>
-                                    )}
-                                </AnimatePresence>
-                                {/* Description on md+ when NOT active */}
+                                {/* ── COLLAPSED MOBILE tile (icon centred, title + arrow inline) ── */}
                                 {!isActive && (
-                                    <motion.p layout className="text-sm text-text-secondary leading-relaxed mb-4 relative z-10 hidden md:block">
-                                        {s.desc}
-                                    </motion.p>
-                                )}
-
-                                <AnimatePresence>
-                                    {isActive && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="border-t border-white/5 pt-3 md:pt-6 space-y-2 md:space-y-4"
-                                        >
-                                            <h4 className="text-[10px] md:text-xs uppercase tracking-widest text-accent-pink font-bold">Key Focus Areas</h4>
-                                            <ul className="space-y-1.5 md:space-y-3">
-                                                {s.details.map((detail, idx) => (
-                                                    <motion.li
-                                                        key={idx}
-                                                        initial={{ x: -10, opacity: 0 }}
-                                                        animate={{ x: 0, opacity: 1 }}
-                                                        transition={{ delay: idx * 0.08 }}
-                                                        className="text-[10px] md:text-sm flex items-center gap-2 text-text-primary"
-                                                    >
-                                                        <ChevronRight size={10} className="text-accent-pink flex-shrink-0" />
-                                                        {detail}
-                                                    </motion.li>
-                                                ))}
-                                            </ul>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-
-                                {/* Tap/hover hint */}
-                                {!isActive && (
-                                    <div className="mt-2 md:mt-6 flex items-center justify-center md:justify-start gap-1 md:gap-2 text-[8px] md:text-xs font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity duration-300">
-                                        <span className="hidden md:inline">Explore Details</span>
-                                        <motion.div animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                                            <ChevronRight size={12} />
-                                        </motion.div>
+                                    <div className="flex md:hidden flex-col items-center justify-center gap-1.5 py-1">
+                                        <div className="text-accent-pink">
+                                            {s.icon}
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-[10px] font-bold leading-tight text-center">{s.title}</span>
+                                            <motion.span
+                                                animate={{ x: [0, 3, 0] }}
+                                                transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                                className="text-accent-pink"
+                                            >
+                                                <ChevronRight size={10} />
+                                            </motion.span>
+                                        </div>
                                     </div>
                                 )}
+
+                                {/* ── EXPANDED card (mobile full-width) or DESKTOP ── */}
+                                <div className={isActive ? 'block' : 'hidden md:block'}>
+                                    <motion.div layout className="mb-3 md:mb-6 text-accent-pink">
+                                        {s.icon}
+                                    </motion.div>
+                                    <motion.h3 layout className="text-base md:text-2xl font-bold mb-2 md:mb-3 leading-tight">
+                                        {s.title}
+                                    </motion.h3>
+
+                                    {/* desktop non-active description */}
+                                    {!isActive && (
+                                        <p className="text-sm text-text-secondary leading-relaxed mb-4 hidden md:block">
+                                            {s.desc}
+                                        </p>
+                                    )}
+
+                                    {/* active description (mobile + desktop) */}
+                                    <AnimatePresence>
+                                        {isActive && (
+                                            <motion.p
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                className="text-xs md:text-sm text-text-secondary leading-relaxed mb-3 md:mb-4"
+                                            >
+                                                {s.desc}
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
+
+                                    {/* details list */}
+                                    <AnimatePresence>
+                                        {isActive && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="border-t border-white/5 pt-3 md:pt-6 space-y-2 md:space-y-4"
+                                            >
+                                                <h4 className="text-[10px] md:text-xs uppercase tracking-widest text-accent-pink font-bold">Key Focus Areas</h4>
+                                                <ul className="space-y-1.5 md:space-y-3">
+                                                    {s.details.map((detail, idx) => (
+                                                        <motion.li
+                                                            key={idx}
+                                                            initial={{ x: -10, opacity: 0 }}
+                                                            animate={{ x: 0, opacity: 1 }}
+                                                            transition={{ delay: idx * 0.08 }}
+                                                            className="text-[10px] md:text-sm flex items-center gap-2 text-text-primary"
+                                                        >
+                                                            <ChevronRight size={10} className="text-accent-pink flex-shrink-0" />
+                                                            {detail}
+                                                        </motion.li>
+                                                    ))}
+                                                </ul>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+
+                                    {/* desktop hover hint */}
+                                    {!isActive && (
+                                        <div className="mt-6 hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                                            <span>Explore Details</span>
+                                            <motion.div animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}>
+                                                <ChevronRight size={12} />
+                                            </motion.div>
+                                        </div>
+                                    )}
+                                </div>
+
                             </motion.div>
                         );
                     })}
