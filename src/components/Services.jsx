@@ -72,21 +72,24 @@ const services = [
 ]
 
 const Services = () => {
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [clickedIndex, setClickedIndex] = useState(null); // persists until clicked again
+    const [hoverIndex, setHoverIndex] = useState(null);     // auto-collapses on mouse leave
     const hoverTimeoutRef = useRef(null);
 
     const handleMouseEnter = (index) => {
-        // Clear any existing timeout
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-
-        // Set new timeout for 1 second
-        hoverTimeoutRef.current = setTimeout(() => {
-            setActiveIndex(index);
-        }, 1000);
+        // Only trigger hover-open if this card isn't already click-locked
+        if (clickedIndex !== index) {
+            hoverTimeoutRef.current = setTimeout(() => {
+                setHoverIndex(index);
+            }, 1000);
+        }
     };
 
     const handleMouseLeave = () => {
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        // Collapse hover-opened card immediately on mouse leave
+        setHoverIndex(null);
     };
 
     return (
@@ -102,7 +105,8 @@ const Services = () => {
             <LayoutGroup>
                 <div className="grid grid-cols-3 gap-3 md:gap-6 items-start">
                     {services.map((s, i) => {
-                        const isActive = activeIndex === i;
+                        // Active if either click-locked OR hover-opened
+                        const isActive = clickedIndex === i || hoverIndex === i;
                         return (
                             <motion.div
                                 key={i}
@@ -120,8 +124,10 @@ const Services = () => {
                                 onMouseEnter={() => handleMouseEnter(i)}
                                 onMouseLeave={handleMouseLeave}
                                 onClick={() => {
-                                    handleMouseLeave();
-                                    setActiveIndex(isActive ? null : i);
+                                    handleMouseLeave(); // clear any pending hover timeout
+                                    setHoverIndex(null); // remove hover-open immediately
+                                    // Toggle click-lock
+                                    setClickedIndex(clickedIndex === i ? null : i);
                                 }}
                                 // On mobile: active card spans full 3 cols; on md+ normal 1 col
                                 className={[
