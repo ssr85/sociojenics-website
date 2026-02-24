@@ -178,15 +178,60 @@ const CountryPicker = ({ selected, onChange }) => {
 }
 
 // ── Shared styles ───────────────────────────────────────────────────────────
-const inputClass =
-    'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:border-accent-pink outline-none transition-colors text-sm placeholder:text-white/25'
+const inputBase =
+    'w-full bg-white/5 border rounded-lg px-4 py-3 outline-none transition-colors text-sm placeholder:text-white/25'
+const inputClass = `${inputBase} border-white/10 focus:border-accent-pink`
+const inputError = `${inputBase} border-red-500/70 focus:border-red-400`
 const labelClass = 'text-[10px] uppercase tracking-widest text-text-secondary mb-1.5 block'
+
+const validateEmail = (v) => {
+    if (!v) return 'Company email is required'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Enter a valid email address'
+    return ''
+}
+const validatePhone = (v) => {
+    if (!v) return 'Phone number is required'
+    const digits = v.replace(/[\s\-().+]/g, '')
+    if (!/^\d+$/.test(digits)) return 'Phone number must contain only digits'
+    if (digits.length < 5) return 'Phone number is too short'
+    if (digits.length > 15) return 'Phone number is too long'
+    return ''
+}
 
 // ── Contact section ─────────────────────────────────────────────────────────
 const Contact = () => {
     const [selectedCountry, setSelectedCountry] = useState(
-        countries.find((c) => c.code === 'IN')
+        countries.find((c) => c.code === 'GB')
     )
+
+    const [fields, setFields] = useState({ email: '', phone: '' })
+    const [errors, setErrors] = useState({ email: '', phone: '' })
+    const [touched, setTouched] = useState({ email: false, phone: false })
+
+    const handleBlur = (field) => {
+        setTouched((t) => ({ ...t, [field]: true }))
+        const err =
+            field === 'email' ? validateEmail(fields.email) : validatePhone(fields.phone)
+        setErrors((e) => ({ ...e, [field]: err }))
+    }
+
+    const handleChange = (field, value) => {
+        setFields((f) => ({ ...f, [field]: value }))
+        if (touched[field]) {
+            const err = field === 'email' ? validateEmail(value) : validatePhone(value)
+            setErrors((e) => ({ ...e, [field]: err }))
+        }
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const emailErr = validateEmail(fields.email)
+        const phoneErr = validatePhone(fields.phone)
+        setErrors({ email: emailErr, phone: phoneErr })
+        setTouched({ email: true, phone: true })
+        if (emailErr || phoneErr) return
+        // TODO: submit form
+    }
 
     return (
         <section id="contact" className="py-16 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
@@ -265,17 +310,29 @@ const Contact = () => {
                     transition={{ duration: 0.5 }}
                     className="w-full lg:w-1/2 glass p-5 md:p-10 rounded-2xl"
                 >
-                    <form className="space-y-5">
+                    <form className="space-y-5" onSubmit={handleSubmit} noValidate>
 
-                        {/* Name + Email */}
+                        {/* Name + Company Email */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className={labelClass}>Full Name</label>
                                 <input type="text" className={inputClass} placeholder="John Doe" />
                             </div>
                             <div>
-                                <label className={labelClass}>Email</label>
-                                <input type="email" className={inputClass} placeholder="john@example.com" />
+                                <label className={labelClass}>Company Email</label>
+                                <input
+                                    type="email"
+                                    value={fields.email}
+                                    onChange={(e) => handleChange('email', e.target.value)}
+                                    onBlur={() => handleBlur('email')}
+                                    className={touched.email && errors.email ? inputError : inputClass}
+                                    placeholder="john@company.com"
+                                />
+                                {touched.email && errors.email && (
+                                    <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                        <span>⚠</span> {errors.email}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -289,13 +346,22 @@ const Contact = () => {
                                 />
                                 <input
                                     type="tel"
-                                    className={`${inputClass} flex-1`}
+                                    value={fields.phone}
+                                    onChange={(e) => handleChange('phone', e.target.value)}
+                                    onBlur={() => handleBlur('phone')}
+                                    className={`${touched.phone && errors.phone ? inputError : inputClass} flex-1`}
                                     placeholder="98765 43210"
                                 />
                             </div>
-                            <p className="text-[9px] text-white/30 mt-1 pl-1">
-                                {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
-                            </p>
+                            {touched.phone && errors.phone ? (
+                                <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                    <span>⚠</span> {errors.phone}
+                                </p>
+                            ) : (
+                                <p className="text-[9px] text-white/30 mt-1 pl-1">
+                                    {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
+                                </p>
+                            )}
                         </div>
 
                         {/* Message */}
@@ -308,7 +374,7 @@ const Contact = () => {
                             />
                         </div>
 
-                        <button className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2">
+                        <button type="submit" className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2">
                             <Send size={14} />
                             Let's Transform
                         </button>
@@ -320,3 +386,5 @@ const Contact = () => {
 }
 
 export default Contact
+
+
