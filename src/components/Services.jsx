@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { Search, Megaphone, BarChart3, PenTool, X, ChevronRight, Cpu, Layout as LayoutIcon } from 'lucide-react'
 import { useState, useRef } from 'react'
 
@@ -99,78 +99,115 @@ const Services = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-3 lg:grid-cols-3 gap-3 md:gap-6 items-start">
-                {services.map((s, i) => (
-                    <motion.div
-                        key={i}
-                        layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        whileHover={{ y: -5 }}
-                        transition={{
-                            duration: 0.5,
-                            delay: i * 0.05,
-                            y: { duration: 0.2, ease: "easeOut" },
-                            layout: { duration: 0.3, ease: "easeInOut" }
-                        }}
-                        viewport={{ once: true }}
-                        onMouseEnter={() => handleMouseEnter(i)}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={() => {
-                            handleMouseLeave(); // Clear hover trigger if clicked
-                            setActiveIndex(activeIndex === i ? null : i);
-                        }}
-                        className={`glass p-4 md:p-8 group transition-all duration-500 cursor-pointer relative overflow-hidden ${activeIndex === i ? 'border-accent-pink shadow-lg shadow-accent-pink/5' : 'hover:border-accent-pink/40'
-                            }`}
-                    >
-                        {/* Glow effect on hover */}
-                        <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <LayoutGroup>
+                <div className="grid grid-cols-3 gap-3 md:gap-6 items-start">
+                    {services.map((s, i) => {
+                        const isActive = activeIndex === i;
+                        return (
+                            <motion.div
+                                key={i}
+                                layout
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                whileHover={{ y: -5 }}
+                                transition={{
+                                    duration: 0.4,
+                                    delay: i * 0.05,
+                                    y: { duration: 0.2, ease: "easeOut" },
+                                    layout: { duration: 0.35, ease: [0.4, 0, 0.2, 1] }
+                                }}
+                                viewport={{ once: true }}
+                                onMouseEnter={() => handleMouseEnter(i)}
+                                onMouseLeave={handleMouseLeave}
+                                onClick={() => {
+                                    handleMouseLeave();
+                                    setActiveIndex(isActive ? null : i);
+                                }}
+                                // On mobile: active card spans full 3 cols; on md+ normal 1 col
+                                className={[
+                                    'glass group cursor-pointer relative overflow-hidden transition-colors duration-300',
+                                    isActive
+                                        ? 'col-span-3 md:col-span-1 p-5 md:p-8 border-accent-pink shadow-lg shadow-accent-pink/10'
+                                        : 'col-span-1 p-4 md:p-8 hover:border-accent-pink/40'
+                                ].join(' ')}
+                            >
+                                {/* Glow */}
+                                <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                        <motion.div layout className="mb-2 md:mb-6 text-accent-pink transition-colors duration-500 relative z-10 scale-75 md:scale-100">
-                            {s.icon}
-                        </motion.div>
-                        <motion.h3 layout className="text-[10px] sm:text-xs md:text-2xl font-bold mb-1 md:mb-3 relative z-10 text-center md:text-left leading-tight">{s.title}</motion.h3>
-                        <motion.p layout className="text-sm text-text-secondary leading-relaxed mb-4 relative z-10 hidden md:block">
-                            {s.desc}
-                        </motion.p>
-
-                        <AnimatePresence>
-                            {activeIndex === i && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    className="pt-4 md:pt-6 border-t border-white/5 space-y-2 md:space-y-4"
-                                >
-                                    <h4 className="text-[8px] md:text-xs uppercase tracking-widest text-accent-pink font-bold">Focus</h4>
-                                    <ul className="space-y-1.5 md:space-y-3">
-                                        {s.details.map((detail, idx) => (
-                                            <motion.li
-                                                key={idx}
-                                                initial={{ x: -10, opacity: 0 }}
-                                                animate={{ x: 0, opacity: 1 }}
-                                                transition={{ delay: idx * 0.1 }}
-                                                className="text-[9px] md:text-sm flex items-center gap-1.5 md:gap-2 text-text-primary uppercase tracking-tighter md:normal-case md:tracking-normal"
-                                            >
-                                                <ChevronRight size={10} className="text-accent-pink flex-shrink-0" />
-                                                <span className="truncate md:whitespace-normal">{detail}</span>
-                                            </motion.li>
-                                        ))}
-                                    </ul>
+                                <motion.div layout className={`text-accent-pink relative z-10 ${isActive ? 'mb-3 md:mb-6' : 'mb-2 md:mb-6 scale-75 md:scale-100'}`}>
+                                    {s.icon}
                                 </motion.div>
-                            )}
-                        </AnimatePresence>
 
-                        {/* Interactive Hint */}
-                        <div className={`mt-2 md:mt-6 flex items-center justify-center md:justify-start gap-1 md:gap-2 text-[8px] md:text-xs font-bold uppercase tracking-widest transition-opacity duration-300 ${activeIndex === i ? 'opacity-0' : 'opacity-40 group-hover:opacity-100'}`}>
-                            <span className="hidden md:inline">Explore Details</span>
-                            <motion.div animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                                <ChevronRight size={12} />
+                                <motion.h3 layout className={`font-bold relative z-10 leading-tight ${isActive
+                                        ? 'text-base md:text-2xl mb-2 md:mb-3'
+                                        : 'text-[10px] sm:text-xs md:text-2xl mb-1 md:mb-3 text-center md:text-left'
+                                    }`}>
+                                    {s.title}
+                                </motion.h3>
+
+                                {/* Description: always visible when expanded on mobile; only on md+ otherwise */}
+                                <AnimatePresence>
+                                    {isActive && (
+                                        <motion.p
+                                            layout
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="text-xs md:text-sm text-text-secondary leading-relaxed mb-3 md:mb-4 relative z-10"
+                                        >
+                                            {s.desc}
+                                        </motion.p>
+                                    )}
+                                </AnimatePresence>
+                                {/* Description on md+ when NOT active */}
+                                {!isActive && (
+                                    <motion.p layout className="text-sm text-text-secondary leading-relaxed mb-4 relative z-10 hidden md:block">
+                                        {s.desc}
+                                    </motion.p>
+                                )}
+
+                                <AnimatePresence>
+                                    {isActive && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="border-t border-white/5 pt-3 md:pt-6 space-y-2 md:space-y-4"
+                                        >
+                                            <h4 className="text-[10px] md:text-xs uppercase tracking-widest text-accent-pink font-bold">Key Focus Areas</h4>
+                                            <ul className="space-y-1.5 md:space-y-3">
+                                                {s.details.map((detail, idx) => (
+                                                    <motion.li
+                                                        key={idx}
+                                                        initial={{ x: -10, opacity: 0 }}
+                                                        animate={{ x: 0, opacity: 1 }}
+                                                        transition={{ delay: idx * 0.08 }}
+                                                        className="text-[10px] md:text-sm flex items-center gap-2 text-text-primary"
+                                                    >
+                                                        <ChevronRight size={10} className="text-accent-pink flex-shrink-0" />
+                                                        {detail}
+                                                    </motion.li>
+                                                ))}
+                                            </ul>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                {/* Tap/hover hint */}
+                                {!isActive && (
+                                    <div className="mt-2 md:mt-6 flex items-center justify-center md:justify-start gap-1 md:gap-2 text-[8px] md:text-xs font-bold uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span className="hidden md:inline">Explore Details</span>
+                                        <motion.div animate={{ x: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                                            <ChevronRight size={12} />
+                                        </motion.div>
+                                    </div>
+                                )}
                             </motion.div>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
+                        );
+                    })}
+                </div>
+            </LayoutGroup>
         </section>
     )
 }
