@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const Hero = () => {
     const ref = useRef(null)
@@ -52,8 +53,8 @@ const Hero = () => {
                             Cutting-edge technology meets creative strategy — built to scale your brand.
                         </p>
                         <div className="flex gap-3">
-                            <button className="btn-primary text-sm px-6 py-3 shadow-lg shadow-accent-pink/20">Explore Solutions</button>
-                            <button className="glass text-sm px-6 py-3 font-semibold hover:border-accent-pink transition-colors">Success Stories</button>
+                            <a href="#services" className="btn-primary text-sm px-6 py-3 shadow-lg shadow-accent-pink/20">Explore Solutions</a>
+                            <Link to="/success-stories" className="glass text-sm px-6 py-3 font-semibold hover:border-accent-pink transition-colors">Success Stories</Link>
                         </div>
                     </motion.div>
                 </div>
@@ -79,8 +80,8 @@ const Hero = () => {
                             We combine cutting-edge technology with creative strategy to transform your brand's digital presence into a high-performance engine for growth.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-5">
-                            <button className="btn-primary text-lg px-10 py-4 shadow-lg shadow-accent-pink/20">Explore Solutions</button>
-                            <button className="glass px-10 py-4 font-semibold hover:border-accent-pink transition-colors">Success Stories</button>
+                            <a href="#services" className="btn-primary text-lg px-10 py-4 shadow-lg shadow-accent-pink/20 text-center">Explore Solutions</a>
+                            <Link to="/success-stories" className="glass px-10 py-4 font-semibold hover:border-accent-pink transition-colors text-center">Success Stories</Link>
                         </div>
                     </motion.div>
 

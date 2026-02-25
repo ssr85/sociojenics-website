@@ -7,6 +7,7 @@ const services = [
         icon: <LayoutIcon size={32} />,
         title: "Website Design",
         desc: "Stunning, high-performance websites built on platforms tailored to specific business needs.",
+        color: "from-accent-pink/20 to-accent-purple/10",
         details: [
             "Platform Flexibility ( HTML, WOrdpress, Low/No-Code )",
             "Integration of Custom Solutions",
@@ -18,6 +19,7 @@ const services = [
         icon: <Search size={32} />,
         title: "Precision SEO",
         desc: "Dominating search results with data-driven optimization and semantic intelligence.",
+        color: "from-sky-500/20 to-accent-pink/10",
         details: [
             "Technical Site Audits",
             "Semantic Keyword Research",
@@ -29,6 +31,7 @@ const services = [
         icon: <Megaphone size={32} />,
         title: "Social Growth",
         desc: "Scaling your brand voice across platforms with high-engagement content strategies.",
+        color: "from-indigo-500/20 to-accent-pink/10",
         details: [
             "Viral Content Creation",
             "Community Management",
@@ -40,6 +43,7 @@ const services = [
         icon: <BarChart3 size={32} />,
         title: "Performance Ads",
         desc: "High-ROI PPC campaigns powered by advanced audience targeting and AI optimization.",
+        color: "from-amber-500/20 to-accent-purple/10",
         details: [
             "Predictive Bidding AI",
             "Retargeting Funnels",
@@ -51,6 +55,7 @@ const services = [
         icon: <PenTool size={32} />,
         title: "Content Studio",
         desc: "Compelling storytelling that converts, from long-form articles to viral video scripts.",
+        color: "from-emerald-500/20 to-accent-pink/10",
         details: [
             "Video Scripting & Hooking",
             "Brand Narrative Design",
@@ -62,6 +67,7 @@ const services = [
         icon: <Cpu size={32} />,
         title: "Custom Solutions",
         desc: "Bespoke digital tools including AI Agents, dashboards, and automated workflows.",
+        color: "from-violet-500/20 to-accent-pink/10",
         details: [
             "AI Agent Integrations",
             "Custom Data Dashboards",
@@ -123,12 +129,12 @@ const Services = () => {
                             <motion.div
                                 key={i}
                                 layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                whileHover={{ y: -5 }}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                whileHover={{ y: -6 }}
                                 transition={{
-                                    duration: 0.4,
-                                    delay: i * 0.05,
+                                    duration: 0.5,
+                                    delay: i * 0.07,
                                     y: { duration: 0.2, ease: "easeOut" },
                                     layout: { duration: 0.35, ease: [0.4, 0, 0.2, 1] }
                                 }}
@@ -144,8 +150,10 @@ const Services = () => {
                                         : 'col-span-1 p-4 md:p-8 hover:border-accent-pink/40'
                                 ].join(' ')}
                             >
-                                {/* Glow */}
-                                <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                {/* Coloured gradient on hover (desktop/tablet only) */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${s.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none hidden md:block`} />
+                                {/* Subtle pink glow fallback */}
+                                <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none md:hidden" />
 
                                 {/* ── COLLAPSED MOBILE tile (icon centred, title + arrow inline) ── */}
                                 {!isActive && (

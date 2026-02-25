@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Lenis from '@studio-freight/lenis'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -6,21 +7,17 @@ import Services from './components/Services'
 import Industries from './components/Industries'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import SuccessStories from './pages/SuccessStories'
+import ContactPage from './pages/ContactPage'
+import ScrollToTop from './components/ScrollToTop'
 
-function App() {
+// Home page as its own component so Lenis works per-route
+function HomePage() {
   useEffect(() => {
     const lenis = new Lenis()
-
-    function raf(time) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf) }
     requestAnimationFrame(raf)
-
-    return () => {
-      lenis.destroy()
-    }
+    return () => lenis.destroy()
   }, [])
 
   return (
@@ -34,6 +31,19 @@ function App() {
       </main>
       <Footer />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/success-stories" element={<SuccessStories />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+    </>
   )
 }
 
