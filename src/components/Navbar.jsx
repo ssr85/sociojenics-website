@@ -53,7 +53,7 @@ const Navbar = () => {
                 </Link>
             </div>
 
-            <Link to="/contact" className="btn-primary text-xs uppercase tracking-widest px-6">
+            <Link to="/contact" className="btn-primary text-[10px] md:text-xs px-4 md:px-6 py-2 md:py-auto uppercase tracking-widest">
                 Let's Talk
             </Link>
         </motion.nav>
