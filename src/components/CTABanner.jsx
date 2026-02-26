@@ -33,7 +33,7 @@ const CTABanner = () => {
 
                         {/* Mobile layout: 2×2 stats grid + button row */}
                         <div className="md:hidden">
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4 text-center">
                                 {stats.map((stat, i) => (
                                     <div key={i}>
                                         <p className="text-xl font-black gradient-text leading-none">{stat.value}</p>
@@ -41,12 +41,14 @@ const CTABanner = () => {
                                     </div>
                                 ))}
                             </div>
-                            <Link
-                                to="/contact"
-                                className="btn-primary inline-flex items-center gap-1.5 px-6 py-2.5 text-sm font-bold shadow-md shadow-accent-pink/20"
-                            >
-                                Start a Project <ArrowUpRight size={14} />
-                            </Link>
+                            <div className="flex justify-center mt-2">
+                                <Link
+                                    to="/contact"
+                                    className="btn-primary inline-flex items-center gap-1.5 px-6 py-2.5 text-sm font-bold shadow-md shadow-accent-pink/20"
+                                >
+                                    Start a Project <ArrowUpRight size={14} />
+                                </Link>
+                            </div>
                         </div>
 
                         {/* Desktop layout: single row */}

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Search, ChevronDown } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Search, ChevronDown, ArrowUpRight } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 
 // Countries sorted A–Z by name
@@ -199,7 +200,20 @@ const validatePhone = (v) => {
 }
 
 // ── Contact section ─────────────────────────────────────────────────────────
-const Contact = () => {
+const Contact = ({ hideFormOnMobile = false }) => {
+    const location = useLocation()
+    const nameRef = useRef(null)
+
+    useEffect(() => {
+        // If navigated here with autoFocus state (e.g. from mobile homepage CTA)
+        if (location.state?.autoFocus && nameRef.current) {
+            // Slight delay ensures the slide-in animation doesn't mess with focus scroll
+            setTimeout(() => {
+                nameRef.current.focus()
+            }, 500)
+        }
+    }, [location.state])
+
     const [selectedCountry, setSelectedCountry] = useState(
         countries.find((c) => c.code === 'GB')
     )
@@ -273,12 +287,24 @@ const Contact = () => {
                 </div>
             </div>
 
+            {/* Mobile "Get Started" Button (below contact info, replaces form) */}
+            {hideFormOnMobile && (
+                <div className="lg:hidden w-full max-w-lg mx-auto mb-8 mt-4">
+                    <Link
+                        to="/contact"
+                        state={{ autoFocus: true }}
+                        className="btn-primary w-full py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                        Get Started <ArrowUpRight size={14} />
+                    </Link>
+                </div>
+            )}
 
             {/* Main layout */}
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
 
                 {/* Left — desktop only */}
-                <div className="hidden lg:flex lg:w-1/2 flex-col justify-center">
+                <div className="hidden lg:flex lg:w-[45%] flex-col justify-center pr-8">
                     <h2 className="text-4xl md:text-5xl font-black mb-6">Let's Ignite Your<br />Growth Engine.</h2>
                     <p className="text-text-secondary mb-10 text-lg leading-relaxed">
                         Ready to take the leap? Our team is waiting to discuss how we can scale your business to new heights.
@@ -308,7 +334,7 @@ const Contact = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
-                    className="w-full lg:w-1/2 glass p-5 md:p-10 rounded-2xl"
+                    className={`${hideFormOnMobile ? 'hidden lg:block w-[55%]' : 'w-full lg:w-[55%]'} glass p-5 md:p-10 rounded-2xl`}
                 >
                     <form className="space-y-5" onSubmit={handleSubmit} noValidate>
 
@@ -316,7 +342,7 @@ const Contact = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label className={labelClass}>Full Name</label>
-                                <input type="text" className={inputClass} placeholder="John Doe" />
+                                <input ref={nameRef} type="text" className={inputClass} placeholder="John Doe" />
                             </div>
                             <div>
                                 <label className={labelClass}>Company Email</label>

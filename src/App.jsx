@@ -31,7 +31,7 @@ function HomePage() {
         <CTABanner />
         <Industries />
         <HomeSuccessStories />
-        <Contact />
+        <Contact hideFormOnMobile />
       </main>
       <Footer />
     </div>
