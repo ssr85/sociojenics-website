@@ -43,9 +43,9 @@ const Footer = () => {
                 </div>
 
                 <div className="flex gap-4">
-                    <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><InstagramIcon /></a>
-                    <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><Linkedin size={18} /></a>
-                    <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><FacebookIcon /></a>
+                    <a href="https://www.instagram.com/sociojenics/?hl=en" target="_blank" rel="noopener noreferrer" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><InstagramIcon /></a>
+                    <a href="https://www.linkedin.com/in/sociojenics/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><Linkedin size={18} /></a>
+                    <a href="https://www.facebook.com/Sociojenics/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 glass flex items-center justify-center hover:text-accent-pink transition-colors"><FacebookIcon /></a>
                 </div>
             </div>
 

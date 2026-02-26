@@ -197,14 +197,22 @@ const HomeSuccessStories = () => {
                                         ))}
                                     </div>
                                 </div>
-
-                                <Link
-                                    to="/success-stories"
-                                    onClick={() => setSelected(null)}
-                                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-accent-pink hover:underline"
-                                >
-                                    See all success stories <ArrowUpRight size={13} />
-                                </Link>
+                                <div className="flex flex-col sm:flex-row items-center gap-6 mt-4">
+                                    <Link
+                                        to="/contact"
+                                        onClick={() => setSelected(null)}
+                                        className="btn-primary w-full sm:w-auto text-xs px-8 py-3.5 shadow-lg shadow-accent-pink/20"
+                                    >
+                                        Start a Project
+                                    </Link>
+                                    <Link
+                                        to="/success-stories"
+                                        onClick={() => setSelected(null)}
+                                        className="inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-text-secondary hover:text-accent-pink transition-colors"
+                                    >
+                                        See all success stories <ArrowUpRight size={13} />
+                                    </Link>
+                                </div>
                             </div>
                         </motion.div>
                     </>

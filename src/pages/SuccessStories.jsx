@@ -205,6 +205,16 @@ const SuccessStories = () => {
                                         ))}
                                     </div>
                                 </div>
+
+                                <div className="mt-8">
+                                    <Link
+                                        to="/contact"
+                                        onClick={() => setSelected(null)}
+                                        className="btn-primary w-full sm:w-auto text-xs px-8 py-3.5 shadow-lg shadow-accent-pink/20 inline-block text-center"
+                                    >
+                                        Start a Project
+                                    </Link>
+                                </div>
                             </div>
                         </motion.div>
                     </>

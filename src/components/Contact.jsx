@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Phone, MapPin, Send, Search, ChevronDown, ArrowUpRight } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, Search, ChevronDown, ArrowUpRight, CheckCircle, Loader2 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 
@@ -198,6 +198,8 @@ const validatePhone = (v) => {
     if (digits.length > 15) return 'Phone number is too long'
     return ''
 }
+const validateName = (v) => (!v || v.trim() === '') ? 'Name is required' : ''
+const validateMessage = (v) => (!v || v.trim() === '') ? 'Message is required' : ''
 
 // ── Contact section ─────────────────────────────────────────────────────────
 const Contact = ({ hideFormOnMobile = false }) => {
@@ -218,33 +220,79 @@ const Contact = ({ hideFormOnMobile = false }) => {
         countries.find((c) => c.code === 'GB')
     )
 
-    const [fields, setFields] = useState({ email: '', phone: '' })
-    const [errors, setErrors] = useState({ email: '', phone: '' })
-    const [touched, setTouched] = useState({ email: false, phone: false })
+    const [fields, setFields] = useState({ name: '', email: '', phone: '', message: '' })
+    const [errors, setErrors] = useState({ name: '', email: '', phone: '', message: '' })
+    const [touched, setTouched] = useState({ name: false, email: false, phone: false, message: false })
+
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitted, setIsSubmitted] = useState(false)
+    const [submitError, setSubmitError] = useState('')
+
+    const validators = {
+        name: validateName,
+        email: validateEmail,
+        phone: validatePhone,
+        message: validateMessage
+    }
 
     const handleBlur = (field) => {
         setTouched((t) => ({ ...t, [field]: true }))
-        const err =
-            field === 'email' ? validateEmail(fields.email) : validatePhone(fields.phone)
-        setErrors((e) => ({ ...e, [field]: err }))
+        setErrors((e) => ({ ...e, [field]: validators[field](fields[field]) }))
     }
 
     const handleChange = (field, value) => {
         setFields((f) => ({ ...f, [field]: value }))
         if (touched[field]) {
-            const err = field === 'email' ? validateEmail(value) : validatePhone(value)
-            setErrors((e) => ({ ...e, [field]: err }))
+            setErrors((e) => ({ ...e, [field]: validators[field](value) }))
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        const emailErr = validateEmail(fields.email)
-        const phoneErr = validatePhone(fields.phone)
-        setErrors({ email: emailErr, phone: phoneErr })
-        setTouched({ email: true, phone: true })
-        if (emailErr || phoneErr) return
-        // TODO: submit form
+
+        const newErrors = {
+            name: validateName(fields.name),
+            email: validateEmail(fields.email),
+            phone: validatePhone(fields.phone),
+            message: validateMessage(fields.message),
+        }
+
+        setErrors(newErrors)
+        setTouched({ name: true, email: true, phone: true, message: true })
+
+        if (Object.values(newErrors).some(err => err !== '')) return
+
+        setIsSubmitting(true)
+        setSubmitError('')
+
+        try {
+            // Include explicitly selected country code with the phone number
+            const fullPhone = `${selectedCountry.dial} ${fields.phone}`
+
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    access_key: "82adfec7-4fa7-40d3-bd4a-968ea67b0cc0",
+                    name: fields.name,
+                    email: fields.email,
+                    phone: fullPhone,
+                    message: fields.message,
+                    subject: `New Lead: ${fields.name} via Sociojenics`
+                })
+            })
+
+            const data = await response.json()
+            if (data.success) {
+                setIsSubmitted(true)
+            } else {
+                setSubmitError(data.message || 'Something went wrong. Please try again.')
+            }
+        } catch (error) {
+            setSubmitError('Network error. Please try again.')
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -328,83 +376,142 @@ const Contact = ({ hideFormOnMobile = false }) => {
                     </div>
                 </div>
 
-                {/* Form */}
+                {/* Form / Success State */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
-                    className={`${hideFormOnMobile ? 'hidden lg:block w-[55%]' : 'w-full lg:w-[55%]'} glass p-5 md:p-10 rounded-2xl`}
+                    className={`${hideFormOnMobile ? 'hidden lg:flex w-[55%]' : 'w-full lg:w-[55%] flex'} glass p-5 md:p-10 rounded-2xl flex-col justify-center`}
                 >
-                    <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-
-                        {/* Name + Company Email */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label className={labelClass}>Full Name</label>
-                                <input ref={nameRef} type="text" className={inputClass} placeholder="John Doe" />
+                    {isSubmitted ? (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="text-center py-10"
+                        >
+                            <div className="w-20 h-20 bg-accent-pink/20 rounded-full flex items-center justify-center mx-auto mb-6 text-accent-pink">
+                                <CheckCircle size={40} />
                             </div>
+                            <h3 className="text-3xl font-black mb-4">Message Sent!</h3>
+                            <p className="text-text-secondary leading-relaxed max-w-sm mx-auto">
+                                Thank you for reaching out, {fields.name.split(' ')[0]}. We'll review your details and get back to you within 24 hours.
+                            </p>
+                        </motion.div>
+                    ) : (
+                        <form className="space-y-5 w-full" onSubmit={handleSubmit} noValidate>
+
+                            {/* Name + Company Email */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className={labelClass}>Full Name</label>
+                                    <input
+                                        ref={nameRef}
+                                        type="text"
+                                        value={fields.name}
+                                        onChange={(e) => handleChange('name', e.target.value)}
+                                        onBlur={() => handleBlur('name')}
+                                        className={touched.name && errors.name ? inputError : inputClass}
+                                        placeholder="John Doe"
+                                        disabled={isSubmitting}
+                                    />
+                                    {touched.name && errors.name && (
+                                        <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                            <span>⚠</span> {errors.name}
+                                        </p>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Company Email</label>
+                                    <input
+                                        type="email"
+                                        value={fields.email}
+                                        onChange={(e) => handleChange('email', e.target.value)}
+                                        onBlur={() => handleBlur('email')}
+                                        className={touched.email && errors.email ? inputError : inputClass}
+                                        placeholder="john@company.com"
+                                    />
+                                    {touched.email && errors.email && (
+                                        <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                            <span>⚠</span> {errors.email}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Phone — country picker + number */}
                             <div>
-                                <label className={labelClass}>Company Email</label>
-                                <input
-                                    type="email"
-                                    value={fields.email}
-                                    onChange={(e) => handleChange('email', e.target.value)}
-                                    onBlur={() => handleBlur('email')}
-                                    className={touched.email && errors.email ? inputError : inputClass}
-                                    placeholder="john@company.com"
-                                />
-                                {touched.email && errors.email && (
+                                <label className={labelClass}>Phone Number</label>
+                                <div className="flex gap-2">
+                                    <CountryPicker
+                                        selected={selectedCountry}
+                                        onChange={setSelectedCountry}
+                                    />
+                                    <input
+                                        type="tel"
+                                        value={fields.phone}
+                                        onChange={(e) => handleChange('phone', e.target.value)}
+                                        onBlur={() => handleBlur('phone')}
+                                        className={`${touched.phone && errors.phone ? inputError : inputClass} flex-1`}
+                                        placeholder="98765 43210"
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                                {touched.phone && errors.phone ? (
                                     <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                        <span>⚠</span> {errors.email}
+                                        <span>⚠</span> {errors.phone}
+                                    </p>
+                                ) : (
+                                    <p className="text-[9px] text-white/30 mt-1 pl-1">
+                                        {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
                                     </p>
                                 )}
                             </div>
-                        </div>
 
-                        {/* Phone — country picker + number */}
-                        <div>
-                            <label className={labelClass}>Phone Number</label>
-                            <div className="flex gap-2">
-                                <CountryPicker
-                                    selected={selectedCountry}
-                                    onChange={setSelectedCountry}
+                            {/* Message */}
+                            <div>
+                                <label className={labelClass}>Message</label>
+                                <textarea
+                                    rows="4"
+                                    value={fields.message}
+                                    onChange={(e) => handleChange('message', e.target.value)}
+                                    onBlur={() => handleBlur('message')}
+                                    className={touched.message && errors.message ? inputError : inputClass}
+                                    placeholder="Tell us about your project..."
+                                    disabled={isSubmitting}
                                 />
-                                <input
-                                    type="tel"
-                                    value={fields.phone}
-                                    onChange={(e) => handleChange('phone', e.target.value)}
-                                    onBlur={() => handleBlur('phone')}
-                                    className={`${touched.phone && errors.phone ? inputError : inputClass} flex-1`}
-                                    placeholder="98765 43210"
-                                />
+                                {touched.message && errors.message && (
+                                    <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                        <span>⚠</span> {errors.message}
+                                    </p>
+                                )}
                             </div>
-                            {touched.phone && errors.phone ? (
-                                <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                    <span>⚠</span> {errors.phone}
-                                </p>
-                            ) : (
-                                <p className="text-[9px] text-white/30 mt-1 pl-1">
-                                    {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
+
+                            {submitError && (
+                                <p className="text-xs text-red-400 bg-red-400/10 p-3 rounded-lg text-center border border-red-400/20">
+                                    {submitError}
                                 </p>
                             )}
-                        </div>
 
-                        {/* Message */}
-                        <div>
-                            <label className={labelClass}>Message</label>
-                            <textarea
-                                rows="4"
-                                className={inputClass}
-                                placeholder="Tell us about your project..."
-                            />
-                        </div>
-
-                        <button type="submit" className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2">
-                            <Send size={14} />
-                            Let's Transform
-                        </button>
-                    </form>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 size={16} className="animate-spin" />
+                                        Sending...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send size={14} />
+                                        Let's Transform
+                                    </>
+                                )}
+                            </button>
+                        </form>
+                    )}
                 </motion.div>
             </div>
         </section>
