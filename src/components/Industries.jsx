@@ -41,8 +41,7 @@ const industries = [
 ]
 
 const Industries = () => {
-    // Duplicate industries for a seamless loop
-    const displayIndustries = [...industries, ...industries];
+    const displayIndustries = [...industries, ...industries]
 
     return (
         <section id="industries" className="py-24 px-6 relative overflow-hidden">
@@ -67,10 +66,7 @@ const Industries = () => {
                         {displayIndustries.map((industry, i) => (
                             <motion.div
                                 key={i}
-                                whileHover={{
-                                    y: -10,
-                                    transition: { duration: 0.3 }
-                                }}
+                                whileHover={{ y: -10, transition: { duration: 0.3 } }}
                                 className="min-w-[215px] md:min-w-[400px] glass p-5 md:p-10 group/card relative border-white/5 hover:border-accent-pink/40 transition-all duration-500"
                             >
                                 {/* Glow effect on hover */}

@@ -234,7 +234,7 @@ const Contact = () => {
     }
 
     return (
-        <section id="contact" className="py-16 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
+        <section id="contact" className="py-16 md:py-24 px-6 max-w-7xl mx-auto">
 
             {/* Mobile header */}
             <div className="text-center mb-8 lg:hidden">

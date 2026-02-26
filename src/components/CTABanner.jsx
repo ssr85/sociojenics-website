@@ -23,17 +23,34 @@ const CTABanner = () => {
                 viewport={{ once: true }}
                 className="container mx-auto max-w-7xl relative z-10"
             >
-                {/* Single slim row: gradient-border pill */}
                 <div
                     className="rounded-xl p-px"
                     style={{
                         background: 'linear-gradient(135deg, rgba(236,72,153,0.4), rgba(168,85,247,0.2), rgba(255,255,255,0.04))'
                     }}
                 >
-                    <div className="rounded-xl bg-[#07090f] px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="rounded-xl bg-[#07090f] px-5 py-4 md:px-6 md:flex md:items-center md:justify-between md:gap-4">
 
-                        {/* Stats */}
-                        <div className="flex items-center gap-6 md:gap-10 flex-wrap">
+                        {/* Mobile layout: 2×2 stats grid + button row */}
+                        <div className="md:hidden">
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-4">
+                                {stats.map((stat, i) => (
+                                    <div key={i}>
+                                        <p className="text-xl font-black gradient-text leading-none">{stat.value}</p>
+                                        <p className="text-[10px] text-text-secondary uppercase tracking-widest font-semibold mt-0.5">{stat.label}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <Link
+                                to="/contact"
+                                className="btn-primary inline-flex items-center gap-1.5 px-6 py-2.5 text-sm font-bold shadow-md shadow-accent-pink/20"
+                            >
+                                Start a Project <ArrowUpRight size={14} />
+                            </Link>
+                        </div>
+
+                        {/* Desktop layout: single row */}
+                        <div className="hidden md:flex md:items-center md:gap-10 md:flex-1">
                             {stats.map((stat, i) => (
                                 <motion.div
                                     key={i}
@@ -42,22 +59,20 @@ const CTABanner = () => {
                                     transition={{ duration: 0.4, delay: i * 0.07 }}
                                     viewport={{ once: true }}
                                 >
-                                    <p className="text-xl md:text-2xl font-black gradient-text leading-none">{stat.value}</p>
+                                    <p className="text-2xl font-black gradient-text leading-none">{stat.value}</p>
                                     <p className="text-[10px] text-text-secondary uppercase tracking-widest font-semibold mt-0.5">{stat.label}</p>
                                 </motion.div>
                             ))}
                         </div>
 
-                        {/* Divider (desktop only) */}
                         <div className="hidden md:block w-px h-8 bg-white/10 shrink-0" />
 
-                        {/* CTA */}
                         <motion.div
                             initial={{ opacity: 0, x: 10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                             viewport={{ once: true }}
-                            className="flex items-center gap-3 shrink-0"
+                            className="hidden md:flex items-center gap-3 shrink-0"
                         >
                             <p className="text-sm text-text-secondary font-light hidden lg:block">Ready to scale?</p>
                             <Link

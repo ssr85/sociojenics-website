@@ -1,14 +1,20 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import useAutoScroll from '../hooks/useAutoScroll'
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, TrendingUp, X } from 'lucide-react'
 import { projects } from '../data/successStoriesData'
 
-// Show top 3 featured stories on the homepage
-const featured = projects.slice(0, 3)
+// All stories for mobile scroll, top 3 for desktop marquee
+const featuredAll = projects
+const featuredDesktop = projects.slice(0, 3)
 
 const HomeSuccessStories = () => {
     const [selected, setSelected] = useState(null)
+    // Mobile: all 6 cards, slower (0.35px/frame)
+    const mobileRef = useAutoScroll(0.35, 2000)
+    // Desktop: 3 cards duplicated, slightly faster (0.5px/frame)
+    const desktopRef = useAutoScroll(0.5, 2000)
 
     return (
         <section id="success-stories" className="py-24 px-6 relative overflow-hidden">
@@ -59,78 +65,78 @@ const HomeSuccessStories = () => {
                     </motion.div>
                 </div>
 
-                {/* Cards grid — 3 cols on desktop */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {featured.map((p, i) => (
-                        <motion.div
-                            key={p.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            whileHover={{ y: -6 }}
-                            transition={{ duration: 0.5, delay: i * 0.1, y: { duration: 0.2 } }}
-                            viewport={{ once: true }}
-                            onClick={() => setSelected(p)}
-                            className="glass p-7 cursor-pointer group relative overflow-hidden hover:border-accent-pink/40 transition-colors duration-300"
-                        >
-                            {/* Hover gradient */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${p.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                            <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                            <div className="relative z-10">
-                                {/* Header row */}
-                                <div className="flex items-start justify-between mb-5">
-                                    <div className="text-accent-pink p-2 glass rounded-xl">{p.icon}</div>
-                                    <span className="text-[10px] uppercase tracking-widest font-bold text-text-secondary border border-white/10 rounded-full px-3 py-1">
-                                        {p.sector}
-                                    </span>
-                                </div>
-
-                                {/* Client + tagline */}
-                                <p className="text-xs text-accent-pink font-bold tracking-widest uppercase mb-1">{p.client}</p>
-                                <h3 className="text-lg font-bold leading-snug mb-4">{p.tagline}</h3>
-
-                                {/* Result pill */}
-                                <div className="inline-flex items-center gap-2 bg-accent-pink/10 border border-accent-pink/20 rounded-full px-4 py-1.5 mb-3">
-                                    <TrendingUp size={12} className="text-accent-pink" />
-                                    <span className="text-accent-pink font-black text-sm">{p.result}</span>
-                                </div>
-                                <p className="text-xs text-text-secondary mb-5">{p.metric}</p>
-
-                                {/* Tags */}
-                                <div className="flex flex-wrap gap-2">
-                                    {p.tags.map(t => (
-                                        <span key={t} className="text-[10px] font-semibold bg-white/5 border border-white/10 rounded-full px-2.5 py-0.5 text-text-secondary">
-                                            {t}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                {/* Read more */}
-                                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span>Read More</span>
-                                    <ArrowUpRight size={14} />
+                {/* Mobile: auto-scroll + user-scrollable strip */}
+                <div
+                    ref={mobileRef}
+                    className="md:hidden overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
+                >
+                    <div className="flex gap-4 py-2 w-max">
+                        {[...featuredAll, ...featuredAll].map((p, i) => (
+                            <div
+                                key={i}
+                                onClick={() => setSelected(p)}
+                                className="glass shrink-0 w-[200px] p-4 cursor-pointer group relative overflow-hidden hover:border-accent-pink/40 transition-colors duration-300"
+                            >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${p.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div className="text-accent-pink p-1.5 glass rounded-lg">{p.icon}</div>
+                                        <span className="text-[9px] uppercase tracking-widest font-bold text-text-secondary border border-white/10 rounded-full px-2 py-0.5">{p.sector}</span>
+                                    </div>
+                                    <p className="text-[10px] text-accent-pink font-bold tracking-widest uppercase mb-1">{p.client}</p>
+                                    <h3 className="text-sm font-bold leading-snug mb-3">{p.tagline}</h3>
+                                    <div className="inline-flex items-center gap-1.5 bg-accent-pink/10 border border-accent-pink/20 rounded-full px-3 py-1">
+                                        <TrendingUp size={10} className="text-accent-pink" />
+                                        <span className="text-accent-pink font-black text-xs">{p.result}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </motion.div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
 
-                {/* Mobile CTA */}
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    viewport={{ once: true }}
-                    className="mt-10 text-center md:hidden"
+                {/* Desktop: auto-scroll + user-scrollable strip */}
+                <div
+                    ref={desktopRef}
+                    className="hidden md:block overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
                 >
-                    <Link
-                        to="/success-stories"
-                        className="inline-flex items-center gap-2 border border-accent-pink/40 text-accent-pink font-bold text-sm uppercase tracking-widest px-6 py-3 rounded-full hover:bg-accent-pink/10 transition-colors duration-300"
-                    >
-                        View All Stories
-                        <ArrowUpRight size={16} />
-                    </Link>
-                </motion.div>
+                    <div className="flex gap-6 py-2 w-max">
+                        {[...featuredDesktop, ...featuredDesktop].map((p, i) => (
+                            <div
+                                key={i}
+                                onClick={() => setSelected(p)}
+                                className="glass shrink-0 w-[320px] p-7 cursor-pointer group relative overflow-hidden hover:border-accent-pink/40 transition-colors duration-300"
+                            >
+                                <div className={`absolute inset-0 bg-gradient-to-br ${p.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                                <div className="absolute inset-0 bg-accent-pink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between mb-5">
+                                        <div className="text-accent-pink p-2 glass rounded-xl">{p.icon}</div>
+                                        <span className="text-[10px] uppercase tracking-widest font-bold text-text-secondary border border-white/10 rounded-full px-3 py-1">{p.sector}</span>
+                                    </div>
+                                    <p className="text-xs text-accent-pink font-bold tracking-widest uppercase mb-1">{p.client}</p>
+                                    <h3 className="text-lg font-bold leading-snug mb-4">{p.tagline}</h3>
+                                    <div className="inline-flex items-center gap-2 bg-accent-pink/10 border border-accent-pink/20 rounded-full px-4 py-1.5 mb-3">
+                                        <TrendingUp size={12} className="text-accent-pink" />
+                                        <span className="text-accent-pink font-black text-sm">{p.result}</span>
+                                    </div>
+                                    <p className="text-xs text-text-secondary mb-5">{p.metric}</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {p.tags.map(t => (
+                                            <span key={t} className="text-[10px] font-semibold bg-white/5 border border-white/10 rounded-full px-2.5 py-0.5 text-text-secondary">{t}</span>
+                                        ))}
+                                    </div>
+                                    <div className="mt-5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-accent-pink opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span>Read More</span>
+                                        <ArrowUpRight size={14} />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
 
             {/* Detail Modal */}
