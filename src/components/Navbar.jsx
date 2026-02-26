@@ -1,16 +1,37 @@
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { Rocket } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-const sections = [
-    { label: 'Home', hash: 'hero' },
-    { label: 'Services', hash: 'services' },
-]
+import { useEffect } from 'react'
 
 const Navbar = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const isHome = location.pathname === '/'
+
+    // Motion value for opacity (1 = fully visible, 0 = fully transparent)
+    const rawOpacity = useMotionValue(1)
+    const opacity = useSpring(rawOpacity, { stiffness: 60, damping: 20 })
+
+    useEffect(() => {
+        if (!isHome) {
+            rawOpacity.set(1)
+            return
+        }
+
+        const ctaEl = document.getElementById('cta-banner')
+        if (!ctaEl) return
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // Fade out when CTA is visible, fade back in when it's gone
+                rawOpacity.set(entry.isIntersecting ? 0 : 1)
+            },
+            { threshold: 0.2 }
+        )
+
+        observer.observe(ctaEl)
+        return () => observer.disconnect()
+    }, [isHome, rawOpacity])
 
     // For section anchors: on home page scroll in-page; elsewhere navigate via router with hash
     const handleSection = (hash) => (e) => {
@@ -28,7 +49,8 @@ const Navbar = () => {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center glass m-6"
+            style={{ opacity }}
+            className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center glass m-6 pointer-events-auto"
         >
             <Link to="/" className="flex items-center gap-2 cursor-pointer">
                 <Rocket className="text-accent-pink" size={28} />

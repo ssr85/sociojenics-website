@@ -6,6 +6,8 @@ import Hero from './components/Hero'
 import Services from './components/Services'
 import Industries from './components/Industries'
 import Contact from './components/Contact'
+import CTABanner from './components/CTABanner'
+import HomeSuccessStories from './components/HomeSuccessStories'
 import Footer from './components/Footer'
 import SuccessStories from './pages/SuccessStories'
 import ContactPage from './pages/ContactPage'
@@ -26,7 +28,9 @@ function HomePage() {
       <main>
         <Hero />
         <Services />
+        <CTABanner />
         <Industries />
+        <HomeSuccessStories />
         <Contact />
       </main>
       <Footer />
