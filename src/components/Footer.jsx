@@ -16,8 +16,11 @@ const FacebookIcon = () => (
 
 const Footer = () => {
     return (
-        <footer className="border-t border-white/10 py-16 px-6">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+        <footer className="border-t border-white/10 py-16 px-6 relative overflow-hidden">
+            {/* Ambient Background Glow */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[600px] md:w-[1000px] h-[300px] md:h-[500px] bg-accent-pink/15 rounded-full blur-[120px] pointer-events-none -z-10" />
+
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 relative z-10">
                 <div className="flex flex-col items-center md:items-start gap-4">
                     <div className="flex items-center gap-2 cursor-pointer">
                         <span className="text-lg font-extrabold tracking-tighter uppercase">SOCIOJENICS</span>
@@ -37,7 +40,7 @@ const Footer = () => {
                     <div className="flex flex-col gap-3">
                         <p className="text-white font-semibold mb-2">Connect</p>
                         <Link to="/contact" className="hover:text-accent-pink transition-colors">Contact Us</Link>
-                        <a href="mailto:hello@sociojenics.com" className="hover:text-accent-pink transition-colors">hello@sociojenics.com</a>
+                        <a href="https://www.instagram.com/sociojenics/?hl=en" target="_blank" rel="noopener noreferrer" className="hover:text-accent-pink transition-colors">Instagram</a>
                         <a href="https://www.linkedin.com/in/sociojenics/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-pink transition-colors">LinkedIn</a>
                     </div>
                 </div>
