@@ -9,7 +9,7 @@ const services = [
         desc: "Stunning, high-performance websites built on platforms tailored to specific business needs.",
         color: "from-accent-pink/20 to-accent-purple/10",
         details: [
-            "Platform Flexibility ( HTML, WOrdpress, Low/No-Code )",
+            "Platform Flexibility (HTML, WordPress, Low/No-Code)",
             "Integration of Custom Solutions",
             "Fully Managed Maintenance",
             "Responsive & SEO-Ready Design"

@@ -1,5 +1,5 @@
 import { Linkedin } from 'lucide-react'
-
+import { Link } from 'react-router-dom'
 const InstagramIcon = () => (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -29,16 +29,16 @@ const Footer = () => {
 
                 <div className="flex gap-12 text-sm text-text-secondary">
                     <div className="flex flex-col gap-3">
-                        <p className="text-white font-semibold mb-2">Platform</p>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">Pricing</a>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">Analytics</a>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">Integrations</a>
+                        <p className="text-white font-semibold mb-2">Navigation</p>
+                        <a href="/#services" className="hover:text-accent-pink transition-colors">Services</a>
+                        <a href="/#industries" className="hover:text-accent-pink transition-colors">Sectors</a>
+                        <Link to="/success-stories" className="hover:text-accent-pink transition-colors">Success Stories</Link>
                     </div>
                     <div className="flex flex-col gap-3">
-                        <p className="text-white font-semibold mb-2">Company</p>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">About</a>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">Careers</a>
-                        <a href="#" className="hover:text-accent-cyan transition-colors">Privacy</a>
+                        <p className="text-white font-semibold mb-2">Connect</p>
+                        <Link to="/contact" className="hover:text-accent-pink transition-colors">Contact Us</Link>
+                        <a href="mailto:hello@sociojenics.com" className="hover:text-accent-pink transition-colors">hello@sociojenics.com</a>
+                        <a href="https://www.linkedin.com/in/sociojenics/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-pink transition-colors">LinkedIn</a>
                     </div>
                 </div>
 
