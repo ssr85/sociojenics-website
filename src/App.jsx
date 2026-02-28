@@ -13,6 +13,7 @@ import SuccessStories from './pages/SuccessStories'
 import ContactPage from './pages/ContactPage'
 import NotFound from './pages/NotFound'
 import ScrollToTop from './components/ScrollToTop'
+import TrackingLine from './components/TrackingLine'
 
 // Home page as its own component so Lenis works per-route
 function HomePage() {
@@ -43,6 +44,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <TrackingLine />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/success-stories" element={<SuccessStories />} />

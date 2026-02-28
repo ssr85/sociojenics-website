@@ -114,14 +114,6 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="absolute bottom-10 left-10 text-text-secondary hidden lg:block"
-            >
-                <div className="w-1.5 h-16 bg-gradient-to-b from-accent-pink to-transparent rounded-full mx-auto" />
-            </motion.div>
         </section>
     )
 }
