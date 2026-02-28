@@ -58,7 +58,13 @@ const Industries = () => {
                 </div>
 
                 {/* Carousel Container */}
-                <div className="relative overflow-hidden -mx-4 px-4">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    className="relative overflow-hidden -mx-4 px-4"
+                >
                     <div
                         className="flex gap-6 py-8 animate-marquee pause-on-hover"
                         style={{ width: "fit-content" }}
@@ -88,7 +94,7 @@ const Industries = () => {
                             </motion.div>
                         ))}
                     </div>
-                </div>
+                </motion.div>
             </div>
         </section>
     )

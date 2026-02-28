@@ -36,10 +36,10 @@ const HomeSuccessStories = () => {
                             Success Stories
                         </motion.span>
                         <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7, delay: 0.1 }}
-                            viewport={{ once: true }}
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+                            viewport={{ once: true, margin: "-50px" }}
                             className="text-4xl md:text-6xl font-black leading-tight tracking-tighter"
                         >
                             Results That{' '}
@@ -49,9 +49,9 @@ const HomeSuccessStories = () => {
 
                     {/* Desktop CTA */}
                     <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
+                        initial={{ opacity: 0, x: 20, scale: 0.9 }}
+                        whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                         viewport={{ once: true }}
                         className="hidden md:block shrink-0"
                     >
@@ -66,8 +66,12 @@ const HomeSuccessStories = () => {
                 </div>
 
                 {/* Mobile: auto-scroll + user-scrollable strip */}
-                <div
+                <motion.div
                     ref={mobileRef}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     className="md:hidden overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
                 >
                     <div className="flex gap-4 py-2 w-max">
@@ -93,11 +97,15 @@ const HomeSuccessStories = () => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Desktop: auto-scroll + user-scrollable strip */}
-                <div
+                <motion.div
                     ref={desktopRef}
+                    initial={{ opacity: 0, scale: 0.97 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    viewport={{ once: true, margin: "-50px" }}
                     className="hidden md:block overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
                 >
                     <div className="flex gap-6 py-2 w-max">
@@ -135,7 +143,7 @@ const HomeSuccessStories = () => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
             </div>
 
@@ -218,7 +226,7 @@ const HomeSuccessStories = () => {
                     </>
                 )}
             </AnimatePresence>
-        </section>
+        </section >
     )
 }
 

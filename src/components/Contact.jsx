@@ -349,7 +349,13 @@ const Contact = ({ hideFormOnMobile = false }) => {
             )}
 
             {/* Main layout */}
-            <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, margin: "-50px" }}
+                className="flex flex-col lg:flex-row gap-10 lg:gap-16"
+            >
 
                 {/* Left — desktop only */}
                 <div className="hidden lg:flex lg:w-[45%] flex-col justify-center pr-8">
@@ -513,7 +519,7 @@ const Contact = ({ hideFormOnMobile = false }) => {
                         </form>
                     )}
                 </motion.div>
-            </div>
+            </motion.div>
         </section>
     )
 }
