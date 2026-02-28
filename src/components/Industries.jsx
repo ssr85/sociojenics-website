@@ -59,9 +59,9 @@ const Industries = () => {
 
                 {/* Carousel Container */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ type: "spring", stiffness: 90, damping: 10, mass: 0.5 }}
                     viewport={{ once: true, margin: "-50px" }}
                     className="relative overflow-hidden -mx-4 px-4"
                 >

@@ -36,9 +36,9 @@ const HomeSuccessStories = () => {
                             Success Stories
                         </motion.span>
                         <motion.h2
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
                             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+                            transition={{ type: "spring", stiffness: 100, damping: 10, mass: 0.5, delay: 0.1 }}
                             viewport={{ once: true, margin: "-50px" }}
                             className="text-4xl md:text-6xl font-black leading-tight tracking-tighter"
                         >
@@ -49,9 +49,9 @@ const HomeSuccessStories = () => {
 
                     {/* Desktop CTA */}
                     <motion.div
-                        initial={{ opacity: 0, x: 20, scale: 0.9 }}
+                        initial={{ opacity: 0, x: 20, scale: 0.8 }}
                         whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                        transition={{ type: "spring", stiffness: 90, damping: 12, mass: 0.5, delay: 0.2 }}
                         viewport={{ once: true }}
                         className="hidden md:block shrink-0"
                     >
@@ -68,9 +68,9 @@ const HomeSuccessStories = () => {
                 {/* Mobile: auto-scroll + user-scrollable strip */}
                 <motion.div
                     ref={mobileRef}
-                    initial={{ opacity: 0, scale: 0.97 }}
+                    initial={{ opacity: 0, scale: 0.85 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    transition={{ type: "spring", stiffness: 80, damping: 12, mass: 0.8 }}
                     viewport={{ once: true, margin: "-50px" }}
                     className="md:hidden overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
                 >
@@ -102,9 +102,9 @@ const HomeSuccessStories = () => {
                 {/* Desktop: auto-scroll + user-scrollable strip */}
                 <motion.div
                     ref={desktopRef}
-                    initial={{ opacity: 0, scale: 0.97 }}
+                    initial={{ opacity: 0, scale: 0.85 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    transition={{ type: "spring", stiffness: 80, damping: 12, mass: 0.8 }}
                     viewport={{ once: true, margin: "-50px" }}
                     className="hidden md:block overflow-x-auto scrollbar-none -mx-6 px-6 cursor-grab active:cursor-grabbing"
                 >

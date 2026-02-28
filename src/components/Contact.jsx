@@ -350,9 +350,9 @@ const Contact = ({ hideFormOnMobile = false }) => {
 
             {/* Main layout */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                initial={{ opacity: 0, scale: 0.85, y: 20 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ type: "spring", stiffness: 85, damping: 12, mass: 0.8 }}
                 viewport={{ once: true, margin: "-50px" }}
                 className="flex flex-col lg:flex-row gap-10 lg:gap-16"
             >
