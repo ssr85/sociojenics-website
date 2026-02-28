@@ -12,7 +12,7 @@ const Contact = ({ hideFormOnMobile }) => {
     const location = useLocation()
     const nameRef = useRef(null)
     const [selectedCountry, setSelectedCountry] = useState(countries.find(c => c.code === 'MY') || countries[0])
-    const [activeMode, setActiveMode] = useState('wizard') // Default to wizard
+    const [activeMode, setActiveMode] = useState('form') // Default to quick form
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -153,10 +153,10 @@ const Contact = ({ hideFormOnMobile }) => {
         <section id="contact" className="py-16 md:py-24 px-6 max-w-7xl mx-auto">
 
             {/* Mobile header */}
-            <div className="text-center mb-8 lg:hidden">
-                <span className="text-accent-pink font-bold tracking-[0.2em] uppercase text-xs mb-3 block">Get In Touch</span>
-                <h2 className="text-3xl font-black mb-3">Let's Ignite Your<br />Growth Engine.</h2>
-                <p className="text-text-secondary text-sm leading-relaxed max-w-sm mx-auto">
+            <div className="text-center mb-10 lg:hidden">
+                <span className="text-accent-pink font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">Get In Touch</span>
+                <h2 className="text-4xl font-black mb-4 leading-tight">Let's Ignite Your<br />Growth Engine.</h2>
+                <p className="text-text-secondary text-sm leading-relaxed max-w-[280px] mx-auto opacity-80">
                     Ready to scale? Drop us a message and we'll get back to you within 24 hours.
                 </p>
             </div>
@@ -164,24 +164,24 @@ const Contact = ({ hideFormOnMobile }) => {
             {/* Contact info cards */}
             <div className="lg:hidden w-full max-w-lg mx-auto mb-8 grid grid-cols-2 gap-3">
                 <div className="col-span-2 flex items-center gap-3 glass px-4 py-3 rounded-xl border border-white/5 justify-center">
-                    <span className="text-accent-pink"><Mail size={16} /></span>
+                    <span className="text-accent-pink"><Mail size={12} /></span>
                     <div>
-                        <p className="text-[9px] uppercase tracking-widest text-text-secondary">Email</p>
-                        <p className="text-xs font-semibold">jennifer@sociojenics.com</p>
+                        <p className="text-[9px] uppercase tracking-widest text-text-secondary leading-none mb-1">Email</p>
+                        <p className="text-sm font-black whitespace-nowrap">jennifer@sociojenics.com</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3 glass px-4 py-3 rounded-xl border border-white/5 justify-center">
-                    <span className="text-accent-pink"><Phone size={16} /></span>
+                    <span className="text-accent-pink"><Phone size={12} /></span>
                     <div>
-                        <p className="text-[9px] uppercase tracking-widest text-text-secondary">Call</p>
-                        <p className="text-xs font-semibold">+60 123 013 043</p>
+                        <p className="text-[9px] uppercase tracking-widest text-text-secondary leading-none mb-1">Call</p>
+                        <p className="text-sm font-black whitespace-nowrap">+60 123 013 043</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3 glass px-4 py-3 rounded-xl border border-white/5 justify-center">
-                    <span className="text-accent-pink"><MapPin size={16} /></span>
+                    <span className="text-accent-pink"><MapPin size={12} /></span>
                     <div>
-                        <p className="text-[9px] uppercase tracking-widest text-text-secondary">Visit</p>
-                        <p className="text-xs font-semibold">KL, Malaysia</p>
+                        <p className="text-[9px] uppercase tracking-widest text-text-secondary leading-none mb-1">Visit</p>
+                        <p className="text-sm font-black whitespace-nowrap">KL, Malaysia</p>
                     </div>
                 </div>
             </div>
@@ -191,36 +191,65 @@ const Contact = ({ hideFormOnMobile }) => {
                 <div className="text-center mb-8">
                     <h3 className="text-sm font-bold uppercase tracking-widest text-white/40 mb-2">How would you like to reach us?</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 md:gap-6">
+                    {/* Wizard Card */}
                     <button
                         onClick={() => setActiveMode('wizard')}
-                        className={`relative p-6 rounded-2xl border text-left transition-all duration-300 group ${activeMode === 'wizard' ? 'bg-accent-pink/10 border-accent-pink border-2' : 'bg-white/5 border-white/10 hover:border-white/20'}`}
+                        className={`relative p-4 md:p-6 rounded-2xl border text-center transition-all duration-300 group flex flex-col items-center ${activeMode === 'wizard' ? 'bg-accent-pink/10 border-accent-pink border-2' : 'bg-white/5 border-white/10 hover:border-white/20'
+                            }`}
                     >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${activeMode === 'wizard' ? 'bg-accent-pink text-white' : 'bg-white/5 text-white/40'}`}>
-                                <Wand2 size={24} />
-                            </div>
-                            <span className="bg-accent-pink text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-accent-pink/20">Recommended</span>
+                        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center mb-2 md:mb-4 transition-colors ${activeMode === 'wizard' ? 'bg-accent-pink text-white' : 'bg-white/5 text-white/40'}`}>
+                            <Wand2 size={20} className="md:w-6 md:h-6" />
                         </div>
-                        <h4 className="font-bold text-lg mb-2">Interactive Project Wizard</h4>
-                        <p className="text-sm text-text-secondary leading-relaxed">Answer a few quick questions, get a tailored package recommendation and a free strategy call</p>
+                        <h4 className="font-bold text-[11px] md:text-lg whitespace-nowrap uppercase tracking-wider leading-none mb-1">Project Wizard</h4>
+                        <p className="hidden md:block text-sm text-text-secondary leading-relaxed">Answer a few quick questions and get a tailored package recommendation</p>
+                        <span className="hidden md:block absolute top-4 right-4 bg-accent-pink text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-accent-pink/20">Recommended</span>
                     </button>
 
+                    {/* Form Card */}
                     <button
                         onClick={() => setActiveMode('form')}
-                        className={`relative p-6 rounded-2xl border text-left transition-all duration-300 group ${activeMode === 'form' ? 'bg-accent-pink/10 border-accent-pink border-2' : 'bg-white/5 border-white/10 hover:border-white/20'}`}
+                        className={`relative p-4 md:p-6 rounded-2xl border text-center transition-all duration-300 group flex flex-col items-center ${activeMode === 'form' ? 'bg-accent-pink/10 border-accent-pink border-2' : 'bg-white/5 border-white/10 hover:border-white/20'
+                            }`}
                     >
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors ${activeMode === 'form' ? 'bg-accent-pink text-white' : 'bg-white/5 text-white/40'}`}>
-                            <Mail size={24} />
+                        <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center mb-2 md:mb-4 transition-colors ${activeMode === 'form' ? 'bg-accent-pink text-white' : 'bg-white/5 text-white/40'}`}>
+                            <Mail size={20} className="md:w-6 md:h-6" />
                         </div>
-                        <h4 className="font-bold text-lg mb-2">Quick Contact Form</h4>
-                        <p className="text-sm text-text-secondary leading-relaxed">Already know what you need? Fill out the form directly</p>
+                        <h4 className="font-bold text-[11px] md:text-lg whitespace-nowrap uppercase tracking-wider leading-none mb-1">Quick Form</h4>
+                        <p className="hidden md:block text-sm text-text-secondary leading-relaxed">Already know what you need? Fill out the form directly</p>
                     </button>
                 </div>
             </div>
 
             <AnimatePresence mode="wait">
-                {activeMode === 'wizard' ? (
+                {isSubmitted ? (
+                    <motion.div
+                        key="success"
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 1.05 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                        className="w-full max-w-2xl mx-auto glass p-10 md:p-16 rounded-[2rem] text-center border border-white/10"
+                    >
+                        <div className="w-24 h-24 bg-accent-pink/20 rounded-full flex items-center justify-center mx-auto mb-8 text-accent-pink shadow-[0_0_40px_rgba(255,51,102,0.2)]">
+                            <CheckCircle size={48} strokeWidth={2.5} />
+                        </div>
+                        <h3 className="text-4xl md:text-5xl font-black mb-6">Message Sent!</h3>
+                        <p className="text-text-secondary leading-relaxed text-lg max-w-md mx-auto mb-10">
+                            Thank you for reaching out{fields.name ? `, ${fields.name.split(' ')[0]}` : ''}. We've received your request and will get back to you within 24 hours.
+                        </p>
+                        <button
+                            onClick={() => {
+                                setIsSubmitted(false);
+                                setActiveMode('form');
+                                setFields({ name: '', email: '', phone: '', message: '' });
+                            }}
+                            className="bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-widest text-xs px-8 py-4 rounded-full transition-all border border-white/10"
+                        >
+                            Return to Form
+                        </button>
+                    </motion.div>
+                ) : activeMode === 'wizard' ? (
                     <motion.div
                         key="wizard"
                         initial={{ opacity: 0, y: 16 }}
@@ -237,7 +266,8 @@ const Contact = ({ hideFormOnMobile }) => {
                                 state: p
                             });
                             if (result.success) {
-                                console.log('Lead sent successfully via Web3Forms');
+                                setFields(prev => ({ ...prev, name: p.contact.name })); // Capture name for success message
+                                setIsSubmitted(true);
                             }
                         }} />
                     </motion.div>
@@ -275,130 +305,114 @@ const Contact = ({ hideFormOnMobile }) => {
                         </div>
 
                         <div className="w-full lg:w-[55%] glass p-5 md:p-10 rounded-2xl flex flex-col justify-center">
-                            {isSubmitted ? (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    className="text-center py-10"
-                                >
-                                    <div className="w-20 h-20 bg-accent-pink/20 rounded-full flex items-center justify-center mx-auto mb-6 text-accent-pink">
-                                        <CheckCircle size={40} />
-                                    </div>
-                                    <h3 className="text-3xl font-black mb-4">Message Sent!</h3>
-                                    <p className="text-text-secondary leading-relaxed max-w-sm mx-auto">
-                                        Thank you for reaching out, {fields.name.split(' ')[0]}. We'll review your details and get back to you within 24 hours.
-                                    </p>
-                                </motion.div>
-                            ) : (
-                                <form className="space-y-5 w-full" onSubmit={handleSubmit} noValidate>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className={labelClass}>Full Name</label>
-                                            <input
-                                                ref={nameRef}
-                                                type="text"
-                                                value={fields.name}
-                                                onChange={(e) => handleChange('name', e.target.value)}
-                                                onBlur={() => handleBlur('name')}
-                                                className={touched.name && errors.name ? inputError : inputClass}
-                                                placeholder="John Doe"
-                                                disabled={isSubmitting}
-                                            />
-                                            {touched.name && errors.name && (
-                                                <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                                    <span>⚠</span> {errors.name}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <label className={labelClass}>Company Email</label>
-                                            <input
-                                                type="email"
-                                                value={fields.email}
-                                                onChange={(e) => handleChange('email', e.target.value)}
-                                                onBlur={() => handleBlur('email')}
-                                                className={touched.email && errors.email ? inputError : inputClass}
-                                                placeholder="john@company.com"
-                                            />
-                                            {touched.email && errors.email && (
-                                                <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                                    <span>⚠</span> {errors.email}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-
+                            <form className="space-y-5 w-full" onSubmit={handleSubmit} noValidate>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label className={labelClass}>Phone Number</label>
-                                        <div className="flex gap-2">
-                                            <CountryPicker
-                                                selected={selectedCountry}
-                                                onChange={setSelectedCountry}
-                                            />
-                                            <input
-                                                type="tel"
-                                                value={fields.phone}
-                                                onChange={(e) => handleChange('phone', e.target.value)}
-                                                onBlur={() => handleBlur('phone')}
-                                                className={`${touched.phone && errors.phone ? inputError : inputClass} flex-1`}
-                                                placeholder="98765 43210"
-                                                disabled={isSubmitting}
-                                            />
-                                        </div>
-                                        {touched.phone && errors.phone ? (
-                                            <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                                <span>⚠</span> {errors.phone}
-                                            </p>
-                                        ) : (
-                                            <p className="text-[9px] text-white/30 mt-1 pl-1">
-                                                {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <label className={labelClass}>Message</label>
-                                        <textarea
-                                            rows="4"
-                                            value={fields.message}
-                                            onChange={(e) => handleChange('message', e.target.value)}
-                                            onBlur={() => handleBlur('message')}
-                                            className={touched.message && errors.message ? inputError : inputClass}
-                                            placeholder="Tell us about your project..."
+                                        <label className={labelClass}>Full Name</label>
+                                        <input
+                                            ref={nameRef}
+                                            type="text"
+                                            value={fields.name}
+                                            onChange={(e) => handleChange('name', e.target.value)}
+                                            onBlur={() => handleBlur('name')}
+                                            className={touched.name && errors.name ? inputError : inputClass}
+                                            placeholder="John Doe"
                                             disabled={isSubmitting}
                                         />
-                                        {touched.message && errors.message && (
+                                        {touched.name && errors.name && (
                                             <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
-                                                <span>⚠</span> {errors.message}
+                                                <span>⚠</span> {errors.name}
                                             </p>
                                         )}
                                     </div>
+                                    <div>
+                                        <label className={labelClass}>Company Email</label>
+                                        <input
+                                            type="email"
+                                            value={fields.email}
+                                            onChange={(e) => handleChange('email', e.target.value)}
+                                            onBlur={() => handleBlur('email')}
+                                            className={touched.email && errors.email ? inputError : inputClass}
+                                            placeholder="john@company.com"
+                                        />
+                                        {touched.email && errors.email && (
+                                            <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                                <span>⚠</span> {errors.email}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
 
-                                    {submitError && (
-                                        <p className="text-xs text-red-400 bg-red-400/10 p-3 rounded-lg text-center border border-red-400/20">
-                                            {submitError}
+                                <div>
+                                    <label className={labelClass}>Phone Number</label>
+                                    <div className="flex gap-2">
+                                        <CountryPicker
+                                            selected={selectedCountry}
+                                            onChange={setSelectedCountry}
+                                        />
+                                        <input
+                                            type="tel"
+                                            value={fields.phone}
+                                            onChange={(e) => handleChange('phone', e.target.value)}
+                                            onBlur={() => handleBlur('phone')}
+                                            className={`${touched.phone && errors.phone ? inputError : inputClass} flex-1`}
+                                            placeholder="98765 43210"
+                                            disabled={isSubmitting}
+                                        />
+                                    </div>
+                                    {touched.phone && errors.phone ? (
+                                        <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                            <span>⚠</span> {errors.phone}
+                                        </p>
+                                    ) : (
+                                        <p className="text-[9px] text-white/30 mt-1 pl-1">
+                                            {selectedCountry.flag} {selectedCountry.name} ({selectedCountry.dial})
                                         </p>
                                     )}
+                                </div>
 
-                                    <button
-                                        type="submit"
+                                <div>
+                                    <label className={labelClass}>Message</label>
+                                    <textarea
+                                        rows="4"
+                                        value={fields.message}
+                                        onChange={(e) => handleChange('message', e.target.value)}
+                                        onBlur={() => handleBlur('message')}
+                                        className={touched.message && errors.message ? inputError : inputClass}
+                                        placeholder="Tell us about your project..."
                                         disabled={isSubmitting}
-                                        className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                                    >
-                                        {isSubmitting ? (
-                                            <>
-                                                <Loader2 size={16} className="animate-spin" />
-                                                Sending...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Send size={14} />
-                                                Let's Transform
-                                            </>
-                                        )}
-                                    </button>
-                                </form>
-                            )}
+                                    />
+                                    {touched.message && errors.message && (
+                                        <p className="text-[10px] text-red-400 mt-1.5 pl-0.5 flex items-center gap-1">
+                                            <span>⚠</span> {errors.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {submitError && (
+                                    <p className="text-xs text-red-400 bg-red-400/10 p-3 rounded-lg text-center border border-red-400/20">
+                                        {submitError}
+                                    </p>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="btn-primary w-full max-w-lg mx-auto py-4 text-xs uppercase tracking-widest flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 size={16} className="animate-spin" />
+                                            Sending...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send size={14} />
+                                            Let's Transform
+                                        </>
+                                    )}
+                                </button>
+                            </form>
                         </div>
                     </motion.div>
                 )}

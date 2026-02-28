@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 /**
  * HELPER: Email Submission via Web3Forms (CORS-Safe)
  * This uses the existing Web3Forms infrastructure to send project 
